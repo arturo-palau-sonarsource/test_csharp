@@ -13,7 +13,7 @@ jobs:
     displayName: Download and install build wrapper
   - task: SonarQubePrepare@5
     inputs:
-      SonarQube: 'SQ99_Test' # Name of the SonarQube service endpoint you created
+      SonarQube: 'sq99' # Name of the SonarQube service endpoint you created
       scannerMode: 'MSBuild'
       configMode: 'file'
       extraProperties: "sonar.cfamily.build-wrapper-output=s/build_wrapper_output_directory"
