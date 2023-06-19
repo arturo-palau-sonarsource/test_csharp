@@ -23,6 +23,11 @@ jobs:
   - script: nuget restore CPlusPlusAndCSharp.sln
     displayName: 'Restore NuGet packages'
     # Command Line task to run your build.
+  - pwsh: |
+      $path = vswhere -latest -requires Microsoft.Component.MSBuild -find MSBuild\**\Bin\MSBuild.exe | select-object -first 1
+      & "$HOME\.sonar\build-wrapper-win-x86\build-wrapper-win-x86-64.exe" --out-dir build_wrapper_output_directory $path CPlusPlusAndCSharp.sln /t:rebuild /nodeReuse:false
+    workingDirectory: .
+    displayName: Build in build-wrapper
   - task: PowerShell@2
     displayName: Check File Directory
     inputs:
@@ -35,11 +40,5 @@ jobs:
         } else {
           Write-Host "File not found."
         }
-  #condition: exists('build-wrapper-dump.json')
-  - pwsh: |
-      $path = vswhere -latest -requires Microsoft.Component.MSBuild -find MSBuild\**\Bin\MSBuild.exe | select-object -first 1
-      & "$HOME\.sonar\build-wrapper-win-x86\build-wrapper-win-x86-64.exe" --out-dir build_wrapper_output_directory $path CPlusPlusAndCSharp.sln /t:rebuild /nodeReuse:false
-    workingDirectory: .
-    displayName: Build in build-wrapper
   - task: SonarQubeAnalyze@5
   - task: SonarQubePublish@5
