@@ -22,8 +22,8 @@ jobs:
       projectKey: 'test_sq_cpp_csharp'
   # Command Line task to run your build.
   - pwsh: |
-      dotnet restore
-      "$HOME\.sonar\build-wrapper-win-x86\build-wrapper-win-x86-64.exe" --out-dir build_wrapper_output_directory dotnet build
+      $path = vswhere -latest -requires Microsoft.Component.MSBuild -find MSBuild\**\Bin\MSBuild.exe | select-object -first 1
+      & "$HOME\.sonar\build-wrapper-win-x86\build-wrapper-win-x86-64.exe" --out-dir build_wrapper_output_directory $path /t:rebuild /nodeReuse:false
     workingDirectory: .
     displayName: Build in build-wrapper
   - task: SonarQubeAnalyze@5
