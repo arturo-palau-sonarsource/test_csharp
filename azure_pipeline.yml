@@ -17,7 +17,7 @@ jobs:
       scannerMode: 'MSBuild'
       configMode: 'file'
       extraProperties: "sonar.cfamily.build-wrapper-output=s/build_wrapper_output_directory"
-      projectKey: 'test_sonar_test_sonar_AYi7MO7iLY87K2n82TnE'
+      #projectKey: 'test_sonar_test_sonar_AYi7MO7iLY87K2n82TnE'
   # Command Line task to run your build.
   - pwsh: |
       $path = vswhere -latest -requires Microsoft.Component.MSBuild -find MSBuild\**\Bin\MSBuild.exe | select-object -first 1
