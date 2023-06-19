@@ -16,10 +16,10 @@ jobs:
       SonarQube: 'sq99' # Name of the SonarQube service endpoint you created
       scannerMode: 'MSBuild'
       configMode: 'file'
-      extraProperties: |
-        "sonar.cfamily.build-wrapper-output=s/build_wrapper_output_directory"
-        "sonar.verbose=true"
       projectKey: 'test_sq_cpp_csharp'
+      extraProperties: |
+        sonar.cfamily.build-wrapper-output=s/build_wrapper_output_directory
+        sonar.verbose=true
   - script: nuget restore CPlusPlusAndCSharp.sln
     displayName: 'Restore NuGet packages'
     # Command Line task to run your build.
