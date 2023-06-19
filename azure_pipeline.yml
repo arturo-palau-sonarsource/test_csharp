@@ -1,0 +1,28 @@
+jobs:
+- job: BuildWindowsWithSonarQube
+  displayName: Build for Windows\MSBuild With SonarQube
+  pool:
+    vmImage: 'windows-latest'
+  variables:
+    SONARQUBE_HOST_URL: https://018f88bbbf8b.ngrok.app
+  steps:
+  # Make Build Wrapper available
+  - pwsh: |
+      curl --create-dirs -sSLo $HOME\.sonar\build-wrapper-win-x86.zip ${{variables.SONARQUBE_HOST_URL}}/static/cpp/build-wrapper-win-x86.zip
+      unzip -o $HOME\.sonar\build-wrapper-win-x86.zip -d $HOME\.sonar\
+    displayName: Download and install build wrapper
+  - task: SonarQubePrepare@5
+    inputs:
+      SonarQube: 'SQ99_Test' # Name of the SonarQube service endpoint you created
+      scannerMode: 'MSBuild'
+      configMode: 'file'
+      extraProperties: "sonar.cfamily.build-wrapper-output=s/build_wrapper_output_directory"
+      projectKey: 'test_sonar_test_sonar_AYi7MO7iLY87K2n82TnE'
+  # Command Line task to run your build.
+  - pwsh: |
+      $path = vswhere -latest -requires Microsoft.Component.MSBuild -find MSBuild\**\Bin\MSBuild.exe | select-object -first 1
+      & "$HOME\.sonar\build-wrapper-win-x86\build-wrapper-win-x86-64.exe" --out-dir build_wrapper_output_directory $path sonar_scanner_example.vcxproj /t:rebuild /nodeReuse:false
+    workingDirectory: .
+    displayName: Build in build-wrapper
+  - task: SonarQubeAnalyze@5
+  - task: SonarQubePublish@5
