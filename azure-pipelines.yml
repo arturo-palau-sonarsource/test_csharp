@@ -16,12 +16,14 @@ jobs:
       SonarQube: 'sq99' # Name of the SonarQube service endpoint you created
       scannerMode: 'MSBuild'
       configMode: 'file'
-      extraProperties: "sonar.cfamily.build-wrapper-output=s/build_wrapper_output_directory"
+      extraProperties: 
+        "sonar.cfamily.build-wrapper-output=s/build_wrapper_output_directory"
+        "sonar.verbose=true"
       projectKey: 'test_sq_cpp_csharp'
   # Command Line task to run your build.
   - pwsh: |
-      $path = vswhere -latest -requires Microsoft.Component.MSBuild -find MSBuild\**\Bin\MSBuild.exe | select-object -first 1
-      & "$HOME\.sonar\build-wrapper-win-x86\build-wrapper-win-x86-64.exe" --out-dir build_wrapper_output_directory $path /t:rebuild /nodeReuse:false
+      dotnet restore
+      "$HOME\.sonar\build-wrapper-win-x86\build-wrapper-win-x86-64.exe" --out-dir build_wrapper_output_directory dotnet build
     workingDirectory: .
     displayName: Build in build-wrapper
   - task: SonarQubeAnalyze@5
