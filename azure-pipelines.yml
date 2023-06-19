@@ -23,6 +23,19 @@ jobs:
   - script: nuget restore CPlusPlusAndCSharp.sln
     displayName: 'Restore NuGet packages'
     # Command Line task to run your build.
+  - task: PowerShell@2
+    displayName: Check File Directory
+    inputs:
+      targetType: 'inline'
+      script: |
+        $filePath = "build_wrapper_output_directory\build-wrapper-dump.json"
+        $file = Get-Item -Path $filePath -ErrorAction SilentlyContinue
+        if ($file) {
+          $file.DirectoryName | Write-Host
+        } else {
+          Write-Host "File not found."
+        }
+  #condition: exists('build-wrapper-dump.json')
   - pwsh: |
       $path = vswhere -latest -requires Microsoft.Component.MSBuild -find MSBuild\**\Bin\MSBuild.exe | select-object -first 1
       & "$HOME\.sonar\build-wrapper-win-x86\build-wrapper-win-x86-64.exe" --out-dir build_wrapper_output_directory $path CPlusPlusAndCSharp.sln /t:rebuild /nodeReuse:false
