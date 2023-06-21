@@ -15,7 +15,7 @@ jobs:
     inputs:
       SonarQube: 'sq99' # Name of the SonarQube service endpoint you created
       scannerMode: 'MSBuild'
-      configMode: 'file'
+      #configMode: 'file'
       projectKey: 'test_sq_cpp_csharp'
       extraProperties: |
         sonar.cfamily.build-wrapper-output=s/build_wrapper_output_directory
