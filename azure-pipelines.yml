@@ -20,7 +20,6 @@ jobs:
       extraProperties: |
         sonar.cfamily.build-wrapper-output=s/build_wrapper_output_directory
         sonar.verbose=true
-        sonar.exclusions=CSharpProject/
   - script: nuget restore CPlusPlusAndCSharp.sln
     displayName: 'Restore NuGet packages'
     # Command Line task to run your build.
